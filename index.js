@@ -139,7 +139,6 @@ class ExtTable extends HTMLElement {
     }
 
     delRow() {
-        console.log(this._currRow);
         this._table.deleteRow(this._currRow);
     }
 
