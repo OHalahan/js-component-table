@@ -52,6 +52,9 @@ class ExtButton extends HTMLElement {
         this._button.addEventListener('mouseleave',() => {
             this._button.style.visibility = 'hidden';
         });
+        this._button.addEventListener('click',() => {
+            this._button.style.visibility = 'hidden';
+        });
     }
 }
 
@@ -60,14 +63,14 @@ class ExtTable extends HTMLElement {
     constructor() {
         super();
 
-        this._currRow = this._currColumn = this._currY = this.currX = null;
+        this._resetControls();
 
         this.innerHTML = '<table class="app__table"></table>';
         this._table = this.querySelector('table');
 
         this.addEventListener('mouseover',() => {
             this.dispatchEvent(new CustomEvent(
-                'showcontrols',
+                'managecontrols',
                 {detail: {
                     visible: true,
                     posX: this._currX,
@@ -77,7 +80,7 @@ class ExtTable extends HTMLElement {
         });
         this.addEventListener('mouseleave',() => {
             this.dispatchEvent(new CustomEvent(
-                'showcontrols',
+                'managecontrols',
                 {detail: {
                     visible: false,
                     posX: this._currX,
@@ -89,6 +92,10 @@ class ExtTable extends HTMLElement {
 
     connectedCallback(){
         this._initTable();
+    }
+
+    _resetControls() {
+        this._currRow = this._currColumn = this._currY = this.currX = null;
     }
 
     _initTable() {
@@ -140,12 +147,14 @@ class ExtTable extends HTMLElement {
 
     delRow() {
         this._table.deleteRow(this._currRow);
+        this._resetControls();
     }
 
     delColumn() {
         for (let row of this._table.rows) {
             row.deleteCell(this._currColumn);
         }
+        this._resetControls();
     }
 }
 
@@ -172,7 +181,7 @@ class AppDrawer extends HTMLElement {
         this.delColBtn.action = () => this.extTable.delColumn();
         this.delRowBtn.action = () => this.extTable.delRow();
 
-        this.extTable.addEventListener('showcontrols', (event) => {
+        this.extTable.addEventListener('managecontrols', (event) => {
             this.delColBtn.visible = (this.extTable.columns === 1) ? false : event.detail.visible;
             this.delRowBtn.visible = (this.extTable.rows === 1) ? false : event.detail.visible;
 
