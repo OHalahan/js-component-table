@@ -29,6 +29,18 @@ class ExtButton extends HTMLElement {
 
     }
 
+    _initMouseHandler() {
+        this._button.addEventListener('mouseover',() => {
+            this._button.style.visibility = 'visible';
+        });
+        this._button.addEventListener('mouseleave',() => {
+            this._button.style.visibility = 'hidden';
+        });
+        this._button.addEventListener('click',() => {
+            this._button.style.visibility = 'hidden';
+        });
+    }
+
     set action(passedFunc) {
         this._button.addEventListener('click', passedFunc);
     }
@@ -43,18 +55,6 @@ class ExtButton extends HTMLElement {
 
     set positionY(pos) {
         this._button.style.top = `${pos}px`;
-    }
-
-    _initMouseHandler() {
-        this._button.addEventListener('mouseover',() => {
-            this._button.style.visibility = 'visible';
-        });
-        this._button.addEventListener('mouseleave',() => {
-            this._button.style.visibility = 'hidden';
-        });
-        this._button.addEventListener('click',() => {
-            this._button.style.visibility = 'hidden';
-        });
     }
 }
 
@@ -163,9 +163,9 @@ class AppDrawer extends HTMLElement {
         super();
 
         this.innerHTML =`
-            <ext-button role="delRow" class="app__del--col--container"></ext-button>
+            <ext-button role="delRow" class="app__del__col__container"></ext-button>
             <div class="app__column">
-                <ext-button role="delCol" class="app__del--row--container"></ext-button>
+                <ext-button role="delCol" class="app__del__row__container"></ext-button>
                 <ext-table></ext-table>
                 <ext-button role="addRow"></ext-button>
             </div>
