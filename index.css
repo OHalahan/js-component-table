@@ -23,12 +23,12 @@
     background-color: #48AAE6;
 }
 
-.app__del--col--container {
+.app__del__col__container {
     width: 50px;
     height: inherit;
 }
 
-.app__del--row--container {
+.app__del__row__container {
     width: inherit;
     height: 50px;
 }
