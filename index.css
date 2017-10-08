@@ -1,39 +1,29 @@
-.app {
-    display: flex;
-    flex-direction: row;
+.app-drawer {
     width: auto;
     height: auto;
 }
 
-.app__column {
-    display: flex;
-    flex-direction: column;
+.app-drawer__table-container {
+    position: relative;
+    top: 50px;
+    left: 50px;
 }
 
-.app__table {
+.table-container__table {
+    display: inline-block;
     margin: 2px;
     border: 1px solid #48AAE6;
     background-color: #FFF;
 }
 
-.app__table__cell {
+.table__cell {
     width: 50px;
     height: 50px;
     padding: 0px;
     background-color: #48AAE6;
 }
 
-.app__del__col__container {
-    width: 50px;
-    height: inherit;
-}
-
-.app__del__row__container {
-    width: inherit;
-    height: 50px;
-}
-
-.app__button {
+.app-drawer__button {
     width: 50px;
     height: 50px;
     border: none;
@@ -47,28 +37,34 @@
     transition: background-color .5s linear;
 }
 
-.app__button--add {
+.app-drawer__button--add {
     background-color: #F3A500;
 }
 
-.app__button--add--col {
-    margin-top: 55px;
+.app-drawer__button--add-col {
+    display: inline-block;
+    position: absolute;
+    top: 5px;
 }
 
-.app__button--add--row {
-    margin-left: 5px;
+.app-drawer__button--add-row {
+    position: relative;
+    left: 55px;
+    bottom: -46px;
 }
 
-.app__button--add:hover {
+.app-drawer__button--add:hover {
     background-color: #F6C052;
+    cursor: pointer;
 }
 
-.app__button--del {
+.app-drawer__button--del {
     background-color: #B20000;
     position: absolute;
     visibility: hidden;
 }
 
-.app__button--del:hover {
+.app-drawer__button--del:hover {
     background-color: #CA4C49;
+    cursor: pointer;
 }
