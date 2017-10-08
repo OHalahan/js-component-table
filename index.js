@@ -1,52 +1,45 @@
 class ExtButton extends HTMLElement {
     constructor() {
         super();
-        this.innerHTML = '<button class="app__button"></button>';
+        this.innerHTML = '<button class="app-drawer__button"></button>';
         this._button = this.querySelector('button');
 
-        switch(this.getAttribute('role')) {
+        let _hideTimer;
+
+        let role = this.getAttribute('role');
+        switch(role) {
             case 'delCol':
-                this._button.classList.add('app__button--del');
-                this._button.innerHTML = '-';
-                this._initMouseHandler();
-                break;
             case 'delRow':
-                this._button.classList.add('app__button--del');
+                this._button.classList.add('app-drawer__button--del');
                 this._button.innerHTML = '-';
                 this._initMouseHandler();
                 break;
             case 'addCol':
-                this._button.classList.add('app__button--add');
-                this._button.classList.add('app__button--add--col');
-                this._button.innerHTML = '+';
-                break;
             case 'addRow':
-                this._button.classList.add('app__button--add');
-                this._button.classList.add('app__button--add--row');
+                this._button.classList.add('app-drawer__button--add');
+                this._button.classList.add(`app-drawer__button--add-${role === 'addRow' ? 'row' : 'col'}`);
                 this._button.innerHTML = '+';
                 break;
         }
-
     }
 
     _initMouseHandler() {
-        this._button.addEventListener('mouseover',() => {
-            this._button.style.visibility = 'visible';
+        this._button.addEventListener('mouseover',(event) => {
+            clearTimeout(this._hideTimer);
+            this._button.visible = true;
         });
-        this._button.addEventListener('mouseleave',() => {
-            this._button.style.visibility = 'hidden';
-        });
-        this._button.addEventListener('click',() => {
-            this._button.style.visibility = 'hidden';
-        });
-    }
-
-    set action(passedFunc) {
-        this._button.addEventListener('click', passedFunc);
+        this._button.addEventListener('mouseleave',() => this.visible = false);
+        this._button.addEventListener('click',() => this.visible = false);
     }
 
     set visible(flag) {
-        this._button.style.visibility = flag ? 'visible' : 'hidden';
+        if (flag) {
+            this._button.style.visibility = 'visible';
+        } else {
+            this._hideTimer = setTimeout(() => {
+                this._button.style.visibility = 'hidden';
+            }, 150);
+        }
     }
 
     set positionX(pos) {
@@ -65,10 +58,19 @@ class ExtTable extends HTMLElement {
 
         this._resetControls();
 
-        this.innerHTML = '<table class="app__table"></table>';
+        this.innerHTML = '<table class="table-container__table"></table>';
         this._table = this.querySelector('table');
 
-        this.addEventListener('mouseover',() => {
+        this._table.addEventListener('mouseover', event => {
+            let target = event.target;
+            if (target.tagName === 'TD') {
+                this._currColumn = target.cellIndex;
+                this._currX = target.getBoundingClientRect()['left'];
+
+                this._currRow = target.parentNode.rowIndex;
+                this._currY = target.parentNode.getBoundingClientRect()['top'];
+            }
+
             this.dispatchEvent(new CustomEvent(
                 'managecontrols',
                 {detail: {
@@ -78,16 +80,10 @@ class ExtTable extends HTMLElement {
                 }}
             ));
         });
-        this.addEventListener('mouseleave',() => {
-            this.dispatchEvent(new CustomEvent(
-                'managecontrols',
-                {detail: {
-                    visible: false,
-                    posX: this._currX,
-                    posY: this._currY
-                }}
-            ));
+        this._table.addEventListener('mouseleave', () => {
+            this.dispatchEvent(new CustomEvent('managecontrols', {detail: {visible: false}}));
         });
+
     }
 
     connectedCallback(){
@@ -108,38 +104,28 @@ class ExtTable extends HTMLElement {
     }
 
     _addCell(row, place) {
-        let cell = row.insertCell(place);
-
-        cell.classList.add('app__table__cell');
-        cell.addEventListener('mouseover', () => {
-            this._currColumn = cell.cellIndex;
-            this._currX = cell.getBoundingClientRect()['left'];
-        });
+        row.insertCell(place).classList.add('table__cell');
     }
 
-    get rows() {
+    get rowCount() {
         return this._table.rows ? this._table.rows.length : 0;
     }
 
-    get columns() {
-        return this.rows ? this._table.rows[0].cells.length : 0;
+    get columnCount() {
+        return this.rowCount ? this._table.rows[0].cells.length : 0;
     }
 
     addRow() {
         let row = this._table.insertRow(this.rows);
-        row.addEventListener('mouseover', () => {
-            this._currRow = row.rowIndex;
-            this._currY = row.getBoundingClientRect()['top'];
-        });
-        if (row.cells.length < this.columns) {
-            for (let place=0; place < this.columns; place++) {
+        if (row.cells.length < this.columnCount) {
+            for (let place=0; place < this.columnCount; place++) {
                 this._addCell(row, place);
             }
         }
     }
 
     addColumn() {
-        let place = this.columns;
+        let place = this.columnCount;
         for (let row of this._table.rows) {
             this._addCell(row, place);
         }
@@ -163,28 +149,27 @@ class AppDrawer extends HTMLElement {
         super();
 
         this.innerHTML =`
-            <ext-button role="delRow" class="app__del__col__container"></ext-button>
-            <div class="app__column">
-                <ext-button role="delCol" class="app__del__row__container"></ext-button>
+            <ext-button role="delRow"></ext-button>
+            <ext-button role="delCol"></ext-button>
+            <div class="app-drawer__table-container">
                 <ext-table></ext-table>
-                <ext-button role="addRow"></ext-button>
+                <ext-button role="addCol"></ext-button>
             </div>
-            <ext-button role="addCol"></ext-button>
+            <ext-button role="addRow"></ext-button>
         `;
 
         this.extTable = this.querySelector('ext-table');
         this.delColBtn = this.querySelector("ext-button[role='delCol']");
         this.delRowBtn = this.querySelector("ext-button[role='delRow']");
 
-        this.querySelector("ext-button[role='addRow']").action = () => this.extTable.addRow();
-        this.querySelector("ext-button[role='addCol']").action = () => this.extTable.addColumn();
-        this.delColBtn.action = () => this.extTable.delColumn();
-        this.delRowBtn.action = () => this.extTable.delRow();
+        this.querySelector("ext-button[role='addRow']").addEventListener('click', () => this.extTable.addRow());
+        this.querySelector("ext-button[role='addCol']").addEventListener('click', () => this.extTable.addColumn());
+        this.delColBtn.addEventListener('click', () => this.extTable.delColumn());
+        this.delRowBtn.addEventListener('click', () => this.extTable.delRow());
 
         this.extTable.addEventListener('managecontrols', (event) => {
-            this.delColBtn.visible = (this.extTable.columns === 1) ? false : event.detail.visible;
-            this.delRowBtn.visible = (this.extTable.rows === 1) ? false : event.detail.visible;
-
+            this.delColBtn.visible = (this.extTable.columnCount === 1) ? false : event.detail.visible;
+            this.delRowBtn.visible = (this.extTable.rowCount === 1) ? false : event.detail.visible;
             this.delColBtn.positionX = event.detail.posX;
             this.delRowBtn.positionY = event.detail.posY;
         });
