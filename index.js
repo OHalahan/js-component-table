@@ -176,11 +176,9 @@ class AppDrawer extends HTMLElement {
         this.innerHTML =`
             <template>
                 <ext-button role="delCol"></ext-button>
-                <div>
-                    <ext-button role="delRow"></ext-button>
-                    <ext-table class="table-container"></ext-table>
-                    <ext-button role="addCol"></ext-button>
-                </div>
+                <ext-button role="delRow"></ext-button>
+                <ext-table class="table-container"></ext-table>
+                <ext-button role="addCol"></ext-button>
                 <ext-button role="addRow"></ext-button>
 
                 <style> @import "style/app-drawer.css"; </style>
