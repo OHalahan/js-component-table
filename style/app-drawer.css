@@ -1,16 +1,17 @@
 .table-container {
-    float: left;
-    margin-top: 50px;
-    margin-left: 50px;
+    padding-top: 50px;
+    padding-left: 50px;
+    display: block;
 }
 
 .button--add-col-container {
-    float: left;
-    margin-top: 55px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-top: 55px;
 }
 
 .button--add-row-container {
-    clear: left;
-    margin-left: 55px;
-    display: block;
+    position: absolute;
+    padding-left: 55px;
 }

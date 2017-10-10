@@ -1,6 +1,7 @@
 .button {
     width: 50px;
     height: 50px;
+    position: absolute;
     border: none;
     color: #FFF;
     font-size: 20px;
@@ -14,7 +15,6 @@
 
 .button--add {
     background-color: #F3A500;
-    position: absolute;
 }
 
 .button--add:hover {
@@ -25,7 +25,6 @@
 .button--del {
     background-color: #B20000;
     visibility: hidden;
-    position: absolute;
 }
 
 .button--del:hover {
