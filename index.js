@@ -29,7 +29,7 @@ class ExtButton extends HTMLElement {
             case 'addCol':
             case 'addRow':
                 this._button.classList.add('button--add');
-                this._button.classList.add(`button--add-${role === 'addRow' ? 'row' : 'col'}`);
+                this.classList.add(`button--add-${role === 'addRow' ? 'row' : 'col'}-container`);
                 this._button.innerHTML = '+';
                 break;
         }
@@ -174,10 +174,10 @@ class AppDrawer extends HTMLElement {
 
         this.innerHTML =`
             <template>
-                <ext-button role="delRow"></ext-button>
                 <ext-button role="delCol"></ext-button>
-                <div class="table-container">
-                    <ext-table></ext-table>
+                <div>
+                    <ext-button role="delRow"></ext-button>
+                    <ext-table class="table-container"></ext-table>
                     <ext-button role="addCol"></ext-button>
                 </div>
                 <ext-button role="addRow"></ext-button>

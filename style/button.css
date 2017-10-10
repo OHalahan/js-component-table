@@ -14,18 +14,7 @@
 
 .button--add {
     background-color: #F3A500;
-}
-
-.button--add-col {
-    display: inline-block;
     position: absolute;
-    top: 5px;
-}
-
-.button--add-row {
-    position: relative;
-    left: 55px;
-    bottom: -46px;
 }
 
 .button--add:hover {
@@ -35,8 +24,8 @@
 
 .button--del {
     background-color: #B20000;
-    position: absolute;
     visibility: hidden;
+    position: absolute;
 }
 
 .button--del:hover {
